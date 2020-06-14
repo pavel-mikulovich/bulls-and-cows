@@ -4,12 +4,15 @@
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.14/lodash.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 <script src="index.js"></script>
+<script src="menu/menu.js"></script>
 <link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="menu/menu.css">
 <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <body>
 
 <div ng-app="bullsAndCows" ng-controller="gameController" class="main">
+    <bc-menu room="gameSettings.room" name="gameSettings.name" difficulty="gameSettings.difficulty"></bc-menu>
     <span class="message">{{gameState.message}}</span>
     <div class="your-number">Your number is <span class="your-number-holder" ng-click="toggleVisibility($event)">{{yourNumber}}</span></div>
     <div class="guesses" id="guesses">
@@ -51,7 +54,6 @@
         <div class="number" ng-click="selectNumber(0)">0</div>
         <div class="number" ng-click="selectNumber(-1)"><i class="fas fa-backspace backspace"></i></div>
     </div>
-    <!--    <div class="toolbar">{{toolbarMessage}}</div>-->
 </div>
 
 </body>

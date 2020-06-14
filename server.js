@@ -16,7 +16,7 @@ app.get('/users', function (req, res) {
     res.send({active: _.values((io.nsps['/' + req.query.room] || {}).sockets).length});
 });
 
-app.post('/create-room', function (req, res) {
+app.post('/enter-room', function (req, res) {
     var roomName = req.body.room;
     if (io.nsps['/' + roomName]) return res.json('ok');
 

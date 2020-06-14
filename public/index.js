@@ -2,9 +2,7 @@ var app = angular.module("bullsAndCows", []);
 
 app.controller("gameController", function ($q, $timeout, $http, $scope) {
     var socket;
-    var maxNumberLength = 4;
     var scrollToBottomElementId = 'guesses';
-    var room = getRoomName();
     var gameStarted = false;
     var isGameOver = false;
     var competitorIsActiveDeferred = $q.defer();
@@ -13,6 +11,11 @@ app.controller("gameController", function ($q, $timeout, $http, $scope) {
     $scope.competitorHasNumber = '';
     $scope.competitorIsConnected = false;
     $scope.guesses = {you: [], competitor: [],};
+    $scope.gameSettings = {
+        room: null,
+        name: null,
+        difficulty: 4,
+    };
 
     $scope.gameStates = {
         occupied: {
@@ -27,7 +30,7 @@ app.controller("gameController", function ($q, $timeout, $http, $scope) {
             keyboardIsActive: true,
             inputHandler: function (number) {
                 $scope.yourNumber = applyNewChar($scope.yourNumber, number);
-                if ($scope.yourNumber.length === maxNumberLength) {
+                if ($scope.yourNumber.length === $scope.gameSettings.difficulty) {
                     emit('competitor-number', {});
                     if ($scope.competitorHasNumber) {
                         $scope.guesses.you.push({number: ''});
@@ -71,7 +74,7 @@ app.controller("gameController", function ($q, $timeout, $http, $scope) {
     function yourTurnInputHandler(number) {
         var guess = _.last($scope.guesses.you);
         guess.number = applyNewChar(guess.number, number);
-        if (guess.number.length === maxNumberLength) {
+        if (guess.number.length === $scope.gameSettings.difficulty) {
             emit('competitor-guess', guess.number); // continue in socket event handler
         }
     }
@@ -79,15 +82,16 @@ app.controller("gameController", function ($q, $timeout, $http, $scope) {
     init();
 
     function init() {
-        getActiveUsers(room).then(activeUsers => {
-            if (activeUsers === 2) {
+        $scope.gameSettings.room = initRoom();
+        getActiveUsers($scope.gameSettings.room).then(activeUsers => {
+            if (activeUsers >= 2) {
                 $scope.gameState = $scope.gameStates.occupied;
                 return;
             }
             $http
-                .post('create-room', {room: room})
+                .post('enter-room', {room: $scope.gameSettings.room})
                 .then(() => {
-                    socket = io('/' + room);
+                    socket = io('/' + $scope.gameSettings.room);
                     initSocketEvents();
                     socket.on('connect', resetCompetitorStatus);
                 });
@@ -113,7 +117,7 @@ app.controller("gameController", function ($q, $timeout, $http, $scope) {
 
                 function getBulls(origNumber, guessNumber) {
                     var count = 0;
-                    _.times(maxNumberLength, idx => {
+                    _.times($scope.gameSettings.difficulty, idx => {
                         if (origNumber[idx] === guessNumber[idx]) count++;
                     });
                     return count;
@@ -129,7 +133,7 @@ app.controller("gameController", function ($q, $timeout, $http, $scope) {
             });
             socket.on('guess-checked', function (guess) {
                 var isYourGuess = guess.socketId !== socket.id; // your guess if competitor was checking
-                var isAllBulls = guess.bulls === maxNumberLength;
+                var isAllBulls = guess.bulls === $scope.gameSettings.difficulty;
                 if (isYourGuess) {
                     $scope.guesses.you.pop(); // replace current with checked one
                     $scope.guesses.you.push(guess);
@@ -179,13 +183,17 @@ app.controller("gameController", function ($q, $timeout, $http, $scope) {
         });
     }
 
-    function getRoomName() {
+    function initRoom() {
         var queryParams = _.fromPairs(_.map(window.location.search.substr(1).split('&'), x => x.split('=')));
-        return queryParams.room || Math.random().toString(36).substring(2, 15);
+        var roomName = queryParams.room || Math.random().toString(36).substring(2, 15);
+        if (!queryParams.room) {
+            history.replaceState(null, 'Bull And Cows room ' + roomName, location.href + '?room=' + roomName);
+        }
+        return roomName;
     }
 
     function resetCompetitorStatus() {
-        getActiveUsers(room).then(activeUsers => {
+        getActiveUsers($scope.gameSettings.room).then(activeUsers => {
             $scope.competitorIsConnected = activeUsers > 1;
             if ($scope.competitorIsConnected && !gameStarted) {
                 $scope.gameState = $scope.gameStates.enterNumber;
@@ -219,7 +227,7 @@ app.controller("gameController", function ($q, $timeout, $http, $scope) {
     }
 
     function applyNewChar(number, newChar) {
-        if (number.length === maxNumberLength) return number; // do not allow bigger numbers
+        if (number.length === $scope.gameSettings.difficulty) return number; // do not allow bigger numbers
         if (number.indexOf(newChar) > -1) return number; // do not allow same chart
         if (newChar > -1) {
             return number + newChar;
