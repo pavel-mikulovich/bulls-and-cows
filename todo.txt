@@ -1,0 +1,11 @@
+bulls and cows todos
++ allow to continue when somebody wins
+- create promise to proceed checking when opponent comes back
+- init room in address bar
+- change difficulty
+- change room
+- change name
+- allow to reset game
+
+- allow single mode
+- allow bot mode

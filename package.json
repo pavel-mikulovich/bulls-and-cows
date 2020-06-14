@@ -1,0 +1,21 @@
+{
+  "name": "code-names",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pavel-mikulovich/code-names"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "build": "npm install"
+  },
+  "keywords": [],
+  "author": "Pavel Mikulovich",
+  "dependencies": {
+    "express": "^4.17.1",
+    "lodash": "^4.17.15",
+    "socket.io": "^2.2.0"
+  }
+}

@@ -1,0 +1,150 @@
+html {
+    display: flex;
+    flex: 1 0 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    color: #fff;
+    touch-action: manipulation;
+}
+
+body {
+    background-color: #2B2B2B;
+    display: flex;
+    flex: 1 0 0;
+}
+
+.main {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+}
+
+.message {
+    font-size: 4rem;
+    background-color: #9ba885;
+    color: #000;
+    text-align: center;
+    padding: 5px;
+}
+
+.your-number {
+    font-size: 3.8rem;
+    background-color: #444444;
+    padding: 5px;
+}
+
+.competitor .online {
+    font-size: 1.8rem;
+    vertical-align: top;
+    margin-top: 5px;
+    color: #ababab;
+    animation: blink 3s linear infinite;
+}
+
+.competitor .online.active {
+    /*animation: none;*/
+    display: none;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+.guesses {
+    flex: 5 0 0;
+    display: flex;
+    margin-top: 15px;
+    font-size: 4.2rem;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+
+.guesses .you, .guesses .competitor {
+    flex: 1 0 0;
+    padding: 0 3px;
+}
+
+.guesses .title {
+    display: block;
+    text-align: center;
+    font-size: 4rem;
+    margin-bottom: 10px;
+}
+
+.guesses .guess {
+    border-bottom: 1px solid #fff;
+    min-height: 63px;
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.guesses .guess .stats .count {
+    display: inline-block;
+    width: 29px;
+    text-align: right;
+}
+
+.guesses .guess .stats .pic {
+    display: inline-block;
+    width: 58px;
+    font-size: 4.2rem;
+    vertical-align: bottom;
+    margin-bottom: 30px;
+    margin-left: 3px;
+    line-height: 0;
+}
+
+.notes {
+    display: flex;
+    margin-bottom: 10px;
+    height: 106px;
+}
+
+.notes .notes-input {
+    padding: 10px 20px;
+    display: flex;
+    flex: 1 0 0;
+    border-radius: 20px;
+    font-size: 3.6rem;
+}
+
+.numbers {
+    height: 25vh;
+    /*flex: 2 0 0;*/
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.number {
+    font-size: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #fff;
+    border-radius: 20px;
+    margin: 4px;
+    background-color: #939a88;
+}
+
+.numbers.active .number {
+    background-color: #9ba885;
+}
+
+.numbers.active .number:hover {
+    background-color: #b9c7a0;
+}
+
+.number .backspace {
+    font-size: 3.6rem;
+}
+
+.toolbar {
+    height: 50px;
+    background-color: #a89d74;
+}

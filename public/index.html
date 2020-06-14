@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.14/lodash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script src="index.js"></script>
+<link rel="stylesheet" href="index.css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+<body>
+
+<div ng-app="bullsAndCows" ng-controller="gameController" class="main">
+    <span class="message">{{gameState.message}}</span>
+    <div class="your-number">Your number is <span class="your-number-holder" ng-click="toggleVisibility($event)">{{yourNumber}}</span></div>
+    <div class="guesses" id="guesses">
+        <div class="you">
+            <span class="title">Your Guesses</span>
+            <div class="guess" ng-repeat="guess in guesses.you track by $index">
+                <span class="guess-number">{{guess.number}}</span>
+                <span class="stats" ng-show="guess.completed">
+                    <span class="bulls"><span class="count">{{guess.bulls}}</span><span class="pic">🐂</span></span>
+                    <span class="cows"><span class="count">{{guess.cows}}</span><span class="pic">🐄</span></span>
+                </span>
+            </div>
+        </div>
+        <div class="competitor">
+            <span class="title">Opponent  <i class="fas fa-globe online" ng-class="{active:competitorIsConnected}"></i></span>
+            <div class="guess" ng-repeat="guess in guesses.competitor track by $index">
+                <span class="guess-number">{{guess.number}}</span>
+                <span class="stats" ng-show="guess.completed">
+                    <span class="bulls"><span class="count">{{guess.bulls}}</span><span class="pic">🐂</span></span>
+                    <span class="cows"><span class="count">{{guess.cows}}</span><span class="pic">🐄</span></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="notes">
+        <textarea name="notes" id="notes" class="notes-input" placeholder="Notes"></textarea>
+    </div>
+    <div class="numbers" ng-class="{active: gameState.keyboardIsActive}">
+        <div class="number" ng-click="selectNumber(1)">1</div>
+        <div class="number" ng-click="selectNumber(2)">2</div>
+        <div class="number" ng-click="selectNumber(3)">3</div>
+        <div class="number" ng-click="selectNumber(4)">4</div>
+        <div class="number" ng-click="selectNumber(5)">5</div>
+        <div class="number" ng-click="selectNumber(6)">6</div>
+        <div class="number" ng-click="selectNumber(7)">7</div>
+        <div class="number" ng-click="selectNumber(8)">8</div>
+        <div class="number" ng-click="selectNumber(9)">9</div>
+        <div class="number"></div>
+        <div class="number" ng-click="selectNumber(0)">0</div>
+        <div class="number" ng-click="selectNumber(-1)"><i class="fas fa-backspace backspace"></i></div>
+    </div>
+    <!--    <div class="toolbar">{{toolbarMessage}}</div>-->
+</div>
+
+</body>
+</html>
